@@ -13,6 +13,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use Authenticatable, Authorizable, HasFactory;
 
+    const USER_ROLE_ADMIN = 0;
+    const USER_ROLE_MAINTENANCE = 1;
+    const USER_ROLE_USER = 2;
+
     /**
      * The attributes that are mass assignable.
      *

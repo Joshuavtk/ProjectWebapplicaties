@@ -1,9 +1,12 @@
 <?php
 
-namespace Tests;
+namespace Tests\Authenticateion;
 
 use App\Models\User;
 use Firebase\JWT\JWT;
+use Tests\AuthenticationController;
+use Tests\TestCase;
+use function config;
 
 class AuthenticationTest extends TestCase
 {

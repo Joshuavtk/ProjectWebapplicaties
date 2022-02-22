@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Tests\Authenticateion;
 
-use App\Models\User;
-use Firebase\JWT\JWT;
+use Tests\TestCase;
 
 class RecoveryTest extends TestCase
 {

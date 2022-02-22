@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Tests\Authenticateion;
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class RegisterTest extends TestCase
 {

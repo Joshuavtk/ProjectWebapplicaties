@@ -1,13 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Authenticateion;
 
+use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Firebase\JWT\JWT;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use function abort;
+use function config;
 
 class AuthenticateController extends Controller
 {

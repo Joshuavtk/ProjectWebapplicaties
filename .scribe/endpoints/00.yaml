@@ -1,0 +1,117 @@
+name: Endpoints
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: /
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: 'Lumen (9.0.0) (Laravel Components ^9.0)'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: authentication
+    metadata:
+      title: 'Basic login'
+      description: 'This is used for first time authentication.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'E-mail of the user.'
+        required: true
+        example: development@dxmusic.nl
+        type: string
+        custom: []
+      password:
+        name: password
+        description: 'Password of the user.'
+        required: true
+        example: debitis
+        type: string
+        custom: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+           "token": "String"
+          }
+           @response 401 "error": {
+           "code": 401,
+           "message": "Invalid credentials."
+          }
+        headers: []
+        description: '200'
+      -
+        status: 429
+        content: |-
+          error": {
+           "code": 429,
+           "message": "Too Many Attempts."
+          }
+        headers: []
+        description: '429'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: authentication/jwt
+    metadata:
+      title: 'Renew token'
+      description: 'With this endpoint you can request an new token, the current one should be valid.'
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+           "token": "String"
+          }
+           @response 401 "error": {
+           "code": 401,
+           "message": "Unauthorized."
+          }
+        headers: []
+        description: '200'
+      -
+        status: 429
+        content: |-
+          error": {
+           "code": 429,
+           "message": "Too Many Attempts."
+          }
+        headers: []
+        description: '429'
+    responseFields: []

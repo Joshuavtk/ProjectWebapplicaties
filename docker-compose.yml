@@ -8,8 +8,7 @@ services:
     depends_on:
       - LaravelWebApp
     ports:
-      - 80:80
-      - 443:443
+      - 8080:80
     networks:
       - hanze
     volumes:

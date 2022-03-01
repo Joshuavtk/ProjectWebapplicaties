@@ -1,0 +1,28 @@
+FROM php:8.1-fpm-alpine3.15
+
+WORKDIR /var/www/html
+
+#install packages
+RUN apk update && apk add tzdata icu-dev zlib-dev libzip-dev libpng-dev curl-dev composer
+
+#Install redis
+RUN mkdir -p /usr/src/php/ext/redis
+RUN curl -fsSL https://pecl.php.net/get/redis --ipv4 | tar xvz -C "/usr/src/php/ext/redis" --strip 1
+RUN docker-php-ext-install intl gd curl pdo_mysql zip bcmath redis opcache
+
+#RUN apk del icu-dev zlib-dev libzip-dev libpng-dev curl-dev
+
+#set Timezone
+RUN ln -snf /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime
+RUN echo "Europe/Amsterdam" > /etc/timezone
+
+#create running user
+RUN adduser -s /bin/nologin -g appuser --disabled-password --uid 950 appuser
+RUN addgroup appuser www-data
+RUN chmod -R 770 -R /var/www/html && chown -R appuser:www-data /var/www/html
+USER appuser
+
+COPY ./php/* /usr/local/etc/php/conf.d/
+
+#container options
+EXPOSE 9000

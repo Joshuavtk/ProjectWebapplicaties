@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use \Illuminate\Support\Str;
 use App\Models\User;
 
 return new class extends Migration
@@ -24,20 +23,12 @@ return new class extends Migration
             $blueprint->smallInteger('validation_code')->nullable();
             $blueprint->timestamps();
             $blueprint->softDeletes();
-
-            $blueprint->foreign('created_by')->references('id')->on('users');
-            $blueprint->foreign('updated_by')->references('id')->on('users');
         });
 
         /**
          * Maak een validatie code nadat het record is op geslagen.
          */
-        DB::unprepared('
-        CREATE TRIGGER trigger_insert_validate_code_after_insert AFTER INSERT ON `users` FOR EACH ROW
-            BEGIN
-                update `users` set `validation_code` = LPAD(FLOOR(RAND() * 999999.99), 6, "0") where `id` = new.id;
-            END
-        ');
+        DB::unprepared('CREATE TRIGGER trigger_insert_validate_code_after_insert AFTER INSERT ON `users` FOR EACH ROW BEGIN update `users` set `validation_code` = LPAD(FLOOR(RAND() * 999999.99), 6, "0") where `id` = new.id; END');
     }
 
     /**

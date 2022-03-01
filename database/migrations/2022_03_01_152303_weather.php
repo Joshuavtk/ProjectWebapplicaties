@@ -13,19 +13,6 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('station', function (Blueprint $blueprint){
-            $blueprint->uuid('id')->primary()->default('uuid()');
-            $blueprint->uuid('timezone_id')->index();
-            $blueprint->uuid('created_by')->index();
-            $blueprint->uuid('updated_by')->index()->nullable();
-            $blueprint->timestamps();
-            $blueprint->softDeletes();
-
-            $blueprint->foreign('timezone_id')->references('id')->on('timezones');
-            $blueprint->foreign('created_by')->references('id')->on('users');
-            $blueprint->foreign('updated_by')->references('id')->on('users');
-        });
-
         Schema::create('timezones', function (Blueprint $blueprint){
             $blueprint->uuid('id')->primary()->default('uuid()');
             $blueprint->integer('offset');
@@ -35,6 +22,19 @@ return new class extends Migration
             $blueprint->timestamps();
             $blueprint->softDeletes();
 
+            $blueprint->foreign('created_by')->references('id')->on('users');
+            $blueprint->foreign('updated_by')->references('id')->on('users');
+        });
+
+        Schema::create('stations', function (Blueprint $blueprint){
+            $blueprint->uuid('id')->primary()->default('uuid()');
+            $blueprint->uuid('timezone_id')->index();
+            $blueprint->uuid('created_by')->index();
+            $blueprint->uuid('updated_by')->index()->nullable();
+            $blueprint->timestamps();
+            $blueprint->softDeletes();
+
+            $blueprint->foreign('timezone_id')->references('id')->on('timezones');
             $blueprint->foreign('created_by')->references('id')->on('users');
             $blueprint->foreign('updated_by')->references('id')->on('users');
         });
@@ -72,8 +72,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropDatabaseIfExists('station');
-        Schema::dropDatabaseIfExists('timezone');
-        Schema::dropDatabaseIfExists('measurement');
+        Schema::dropDatabaseIfExists('timezones');
+        Schema::dropDatabaseIfExists('measurements');
+        Schema::dropDatabaseIfExists('stations');
     }
 };

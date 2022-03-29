@@ -38,4 +38,5 @@ $router->group(['prefix' => 'users', 'middleware' => ['throttle:1000,1']], funct
     });
 });
 
-
+$router->post('/sendWeatherData', 'WeatherStationsController@receive');
+$router->get('/getWeatherData', 'WeatherStationsController@get');

@@ -45,7 +45,7 @@ class AuthenticateController extends Controller
             $user = User::where('email', $request->post('email'))->firstOrFail();
             //validate password
             if (Hash::check($request->get('password'), $user->password)) {
-                return ['token' => AuthenticationController::generateNewJWTToken($user)];
+                return ['token' =>  AuthenticateController::generateNewJWTToken($user)];
             }
             abort(401, "Invalid credentials");
         } catch (ModelNotFoundException $e){
@@ -73,7 +73,7 @@ class AuthenticateController extends Controller
      **/
     public function jwt()
     {
-        return ['token' => AuthenticationController::generateNewJWTToken(Auth::user())];
+        return ['token' => AuthenticateController::generateNewJWTToken(Auth::user())];
     }
 
     static function generateNewJWTToken($user): string
@@ -82,7 +82,7 @@ class AuthenticateController extends Controller
         $payload = config('jwt.payload');
 
         //add payload options
-        $payload['aud'] = 'api.dxmusic.nl/v1/research';
+        $payload['aud'] = 'hanze.nl/v1/';
         $payload['iat'] = time();
         $payload['exp'] = time() + 604800;// een week
         $payload['id'] = $user->id;
@@ -91,7 +91,7 @@ class AuthenticateController extends Controller
 
         return JWT::encode(
             $payload,
-            config('app.key'),
+            config('jwt.key'),
             config('jwt.alg')
         );
     }

@@ -111,6 +111,7 @@ $app->configure('app');
 if (class_exists(\Knuckles\Scribe\ScribeServiceProvider::class)) {
     $app->register(\Knuckles\Scribe\ScribeServiceProvider::class);
     $app->configure('scribe');
+    $app->configure('jwt');
 }
 
 $app->router->group([

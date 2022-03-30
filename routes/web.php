@@ -27,12 +27,12 @@ $router->group(['prefix' => 'authentication'], function () use ($router) {
     });
 });
 
-$router->group(['prefix' => 'users'], function () use ($router) {
+$router->group(['prefix' => 'users', 'middleware' => ['auth']], function () use ($router) {
     $router->get('/', 'UsersController@view');
     $router->post('/', 'UsersController@update');
     $router->delete('/delete', 'UsersController@delete');
 
-    $router->group(['prefix' => '/admin', 'middleware' => ['auth']], function () use ($router) {
+    $router->group(['prefix' => '/admin'], function () use ($router) {
         $router->get('/', 'Admin\UsersController@index');
         $router->get('/trashed', 'Admin\UsersController@trashed');
         $router->get('/{id}', 'Admin\UsersController@view');
@@ -44,7 +44,7 @@ $router->group(['prefix' => 'users'], function () use ($router) {
     });
 });
 //
-$router->group(['prefix' => 'maintenances'], function () use ($router) {
+$router->group(['prefix' => 'maintenances', 'middleware' => ['auth']], function () use ($router) {
     $router->get('/{id}', 'MaintenancesController@view');
     $router->post('/{id}', 'MaintenancesController@update');
     $router->delete('/{id}/delete', 'MaintenancesController@delete');

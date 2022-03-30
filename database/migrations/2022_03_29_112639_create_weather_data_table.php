@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,25 +13,28 @@ return new class extends Migration
     public function up()
     {
         Schema::create('weather_data', function (Blueprint $table) {
-            $table->id()->primary()->autoIncrement();
-            $table->integer("station_nr");
+            $table->increments('id');
+
+            $table->string('station_name', '10');
+//            $table->foreign('station_name')->references('name')->on('station');
+
             $table->dateTime('datetime');
-            $table->decimal('temp');
-            $table->decimal('dew_point_temp');
-            $table->decimal('station_air_pressure');
-            $table->decimal('sea_level_air_pressure');
-            $table->decimal('visibility');
-            $table->decimal('wind_speed');
-            $table->decimal('precipitation');
-            $table->decimal('snow_depth');
+            $table->decimal('temp')->nullable();
+            $table->decimal('dew_point_temp')->nullable();
+            $table->decimal('station_air_pressure')->nullable();
+            $table->decimal('sea_level_air_pressure')->nullable();
+            $table->decimal('visibility')->nullable();
+            $table->decimal('wind_speed')->nullable();
+            $table->decimal('precipitation')->nullable();
+            $table->decimal('snow_depth')->nullable();
+            $table->decimal('cloud_cover_percentage')->nullable();
+            $table->integer('wind_direction')->nullable();
             $table->boolean('frost')->default(false);
             $table->boolean('rain')->default(false);
             $table->boolean('snow')->default(false);
             $table->boolean('hail')->default(false);
             $table->boolean('thunderstorm')->default(false);
             $table->boolean('tornado')->default(false);
-            $table->decimal('cloud_cover_percentage');
-            $table->integer('wind_direction');
         });
     }
 

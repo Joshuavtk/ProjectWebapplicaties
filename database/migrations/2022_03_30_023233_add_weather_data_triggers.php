@@ -17,24 +17,18 @@ return new class extends Migration {
     CREATE TRIGGER correct_measurement BEFORE INSERT ON " . $db_name . ".weather_data
          FOR EACH ROW
          BEGIN
+             SELECT ROUND(SUM(lastValues.temp) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
              IF NEW.temp IS NULL THEN
-                SELECT ROUND(SUM(lastValues.temp) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
                 SET NEW.temp = @result;
-             ELSE
-                SELECT ROUND(SUM(lastValues.temp) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
-                IF NEW.temp > @result * 1.2 OR NEW.temp < @result * 0.8 THEN
-                    SET NEW.temp = ROUND(@result * (-0.8+0.4*RAND()), 1);
-                END IF;
+             ELSEIF NEW.temp > @result * 1.2 OR NEW.temp < @result * 0.8 THEN
+                SET NEW.temp = ROUND(@result * (-0.8+0.4*RAND()), 1);
              END IF;
 
+             SELECT ROUND(SUM(lastValues.dew_point_temp) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
              IF NEW.dew_point_temp IS NULL THEN
-                SELECT ROUND(SUM(lastValues.dew_point_temp) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
                 SET NEW.dew_point_temp = @result;
-             ELSE
-                SELECT ROUND(SUM(lastValues.dew_point_temp) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
-                IF NEW.dew_point_temp > @result * 1.2 OR NEW.dew_point_temp < @result * 0.8 THEN
-                    SET NEW.dew_point_temp = ROUND(@result * (-0.8+0.4*RAND()), 1);
-                END IF;
+             ELSEIF NEW.dew_point_temp > @result * 1.2 OR NEW.dew_point_temp < @result * 0.8 THEN
+                SET NEW.dew_point_temp = ROUND(@result * (-0.8+0.4*RAND()), 1);
              END IF;
 
              IF NEW.station_air_pressure IS NULL THEN

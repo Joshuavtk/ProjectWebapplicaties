@@ -22,7 +22,7 @@ return new class extends Migration {
                 SET NEW.temp = @result;
              ELSE
                 SELECT ROUND(SUM(lastValues.temp) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
-                IF NEW.temp > @result + @result * 0.20 OR NEW.temp < @result - @result * 0.20 THEN
+                IF NEW.temp > @result * 1.20 OR NEW.temp < @result * 0.80 THEN
                     SET NEW.temp = ROUND(@result + @result * (-0.2+0.4*RAND()), 1);
                 END IF;
              END IF;
@@ -32,7 +32,7 @@ return new class extends Migration {
                 SET NEW.dew_point_temp = @result;
              ELSE
                 SELECT ROUND(SUM(lastValues.dew_point_temp) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
-                IF NEW.dew_point_temp > @result + @result * 0.20 OR NEW.dew_point_temp < @result - @result * 0.20 THEN
+                IF NEW.dew_point_temp > @result * 1.20 OR NEW.dew_point_temp < @result * 0.80 THEN
                     SET NEW.dew_point_temp = ROUND(@result + @result * (-0.2+0.4*RAND()), 1);
                 END IF;
              END IF;

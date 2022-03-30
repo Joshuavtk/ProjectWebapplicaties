@@ -20,15 +20,15 @@ return new class extends Migration {
              SELECT ROUND(SUM(lastValues.temp) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
              IF NEW.temp IS NULL THEN
                 SET NEW.temp = @result;
-             ELSEIF NEW.temp > @result * 1.2 OR NEW.temp < @result * 0.8 THEN
-                SET NEW.temp = ROUND(@result * (0.8+0.4*RAND()), 1);
+             ELSEIF NEW.temp > @result * 1.2 OR NEW.temp < @result * .8 THEN
+                SET NEW.temp = @result * ROUND(RAND(), 1) * .4 + .8;
              END IF;
 
              SELECT ROUND(SUM(lastValues.dew_point_temp) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
              IF NEW.dew_point_temp IS NULL THEN
                 SET NEW.dew_point_temp = @result;
-             ELSEIF NEW.dew_point_temp > @result * 1.2 OR NEW.dew_point_temp < @result * 0.8 THEN
-                SET NEW.dew_point_temp = ROUND(@result * (0.8+0.4*RAND()), 1);
+             ELSEIF NEW.dew_point_temp > @result * 1.2 OR NEW.dew_point_temp < @result * .8 THEN
+                SET NEW.dew_point_temp = @result * ROUND(RAND(), 1) * .4 + .8;
              END IF;
 
              IF NEW.station_air_pressure IS NULL THEN

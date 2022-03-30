@@ -8,8 +8,7 @@ services:
     depends_on:
       - LaravelWebApp
     ports:
-      - 80:80
-      - 443:443
+      - 8080:80
     networks:
       - hanze
     volumes:
@@ -73,7 +72,7 @@ services:
     networks:
       - hanze
     ports:
-    - 6379:6379
+      - 6379:6379
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
 networks:

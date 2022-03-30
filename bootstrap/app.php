@@ -26,6 +26,7 @@ $app = new Laravel\Lumen\Application(
 // $app->withFacades();
 
 $app->withEloquent();
+$app->withFacades();
 
 /*
 |--------------------------------------------------------------------------
@@ -72,9 +73,9 @@ $app->configure('app');
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+ $app->middleware([
+     App\Http\Middleware\RespondWithJsonMiddleware::class
+ ]);
 
  $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,

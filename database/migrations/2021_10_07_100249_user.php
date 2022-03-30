@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $blueprint) {
-            $blueprint->uuid('id')->primary()->default('uuid()');
+            $blueprint->uuid('id')->primary()->default(DB::raw('(UUID())'));
             $blueprint->string('email');
             $blueprint->string('password');
             $blueprint->smallInteger('role')->default(User::USER_ROLE_USER);
@@ -28,7 +28,7 @@ return new class extends Migration
         /**
          * Maak een validatie code nadat het record is op geslagen.
          */
-        DB::unprepared('CREATE TRIGGER trigger_insert_validate_code_after_insert AFTER INSERT ON `users` FOR EACH ROW BEGIN update `users` set `validation_code` = LPAD(FLOOR(RAND() * 999999.99), 6, "0") where `id` = new.id; END');
+    //    DB::unprepared('CREATE TRIGGER trigger_insert_validate_code_after_insert AFTER INSERT ON `users` FOR EACH ROW BEGIN update `users` set `validation_code` = LPAD(FLOOR(RAND() * 999999.99), 6, "0") where `id` = new.id; END');
     }
 
     /**

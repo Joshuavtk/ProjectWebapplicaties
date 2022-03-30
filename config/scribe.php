@@ -19,7 +19,7 @@ return [
     /*
      * The base URL displayed in the docs. If this is empty, Scribe will use the value of config('app.url').
      */
-    'base_url' => null,
+    'base_url' => 'localhost:8080',
 
     /*
      * Tell Scribe what routes to generate documentation for.
@@ -33,34 +33,15 @@ return [
              * A route must fulfill ALL conditions to be included.
              */
             'match' => [
-                /*
-                 * Match only routes whose paths match this pattern (use * as a wildcard to match any characters). Example: 'users/*'.
-                 */
                 'prefixes' => ['*'],
-
-                /*
-                 * Match only routes whose domains match this pattern (use * as a wildcard to match any characters). Example: 'api.*'.
-                 */
                 'domains' => ['*'],
-
-                /*
-                 * [Dingo router only] Match only routes registered under this version. Wildcards are not supported.
-                 */
                 'versions' => ['v1'],
             ],
 
-            /*
-             * Include these routes even if they did not match the rules above.
-             * The route can be referenced by name or path here. Wildcards are supported.
-             */
             'include' => [
                 // 'users.index', 'healthcheck*'
             ],
 
-            /*
-             * Exclude these routes even if they matched the rules above.
-             * The route can be referenced by name or path here. Wildcards are supported.
-             */
             'exclude' => [
                 // '/health', 'admin.*'
             ],

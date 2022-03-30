@@ -44,6 +44,6 @@ class Timezone extends Model
     //Geeft een collectie van alle stations objecten terug met deze timezone
     public function stations(): HasMany
     {
-        return $this->hasMany(Station::class, 'id', 'station_id');
+        return $this->hasMany(Stations::class, 'id', 'station_id');
     }
 }

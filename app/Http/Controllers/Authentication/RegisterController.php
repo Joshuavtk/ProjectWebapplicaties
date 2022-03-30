@@ -2,7 +2,16 @@
 
 namespace App\Http\Controllers\Authentication;
 
-class RegisterController
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
+/**
+ * @group Authenticatie
+ */
+
+class RegisterController extends Controller
 {
     /**
      * Gebruiker registratie
@@ -11,13 +20,11 @@ class RegisterController
      * De validatie code moet naar de validate endpoint gepost worden voor dat het account actief wordt.
      * de gebruiker krijgt hier de meest basis rol.
      *
-     * @bodyParam name string required volledige naam van de gebruiker.
-     * @bodyParam email string required email address van de gebruiker.
-     * @bodyParam password string required nieuw wachtwoord.
-     * @bodyParam passwordConfirm string required nieuw wachtwoord bevestiging.
+     * @bodyParam email string required email address van de gebruiker. Example: user@project.local
+     * @bodyParam password string required nieuw wachtwoord. Example: asdasd
      *
      * @response 200 "success": {
-     *  "message": "successs"
+     *  "message": "Successful"
      * }
      *  @response 422 "error": {
      *  "code": 422,
@@ -28,16 +35,23 @@ class RegisterController
      *  "message": "Too Many Attempts."
      * }
      */
-    public function testRegister(){}
+    public function register(Request $request){
+        $validated = $this->validateRequest($request);
+        $user = new User($validated);
+        $user->role = User::USER_ROLE_USER;
+        if($user->save())
+            return response(['message' => 'Successful']);
+
+        return response(['message' => 'Invalid request'],422);
+    }
 
     /**
-     * Nieuw wachtwoord instellen
+     * Sctiveer gebruikers account
      *
      * na het ontvangen van de mail met de validate code.
      * Deze moet door de gebruiker worden ingevoerd om te bevestigen dat die zij/haar account is
      *
      * @bodyParam validationCode string required deze code heeft de gebruiker in de mail gekregen.
-     * @bodyParam email string required het email address die bij de code hoort.
      *
      * @response 200 "success": {
      *  "message": "account gevalideerd"
@@ -51,5 +65,19 @@ class RegisterController
      *  "message": "Too Many Attempts."
      * }
      */
-    public function testValidateRegister(){}
+    public function verify(User $user, Request $request){
+        if(!is_null($user) && $user->validation_code == $request->post('validation_code'))
+            return response(['message' => 'Account gevalideerd']);
+
+        return abort("Invalid request.",422);
+    }
+
+    private function validateRequest(Request $request)
+    {
+        return $this->validate($request, [
+            'email' => 'required_without:password|email|unique:users', //email address must be unique
+            'password' => 'required|string',
+            'created_by,updated_by,deleted_by' => 'uuid|exists:users,id', //created by user must already exist
+        ]);
+    }
 }

@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Hash;
 use function abort;
 use function config;
 
+/**
+ * @group Authenticatie
+ */
 class AuthenticateController extends Controller
 {
 

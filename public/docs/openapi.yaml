@@ -1,13 +1,45 @@
 openapi: 3.0.3
 info:
-  title: Lumen
+  title: 'Hanze Project 2.3'
   description: ''
   version: 1.0.0
 servers:
   -
-    url: 'http://localhost'
+    url: 'localhost:8080'
 paths:
-  /:
+  '/maintenances/{id}':
+    post:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Maintenance management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: ''
+        example: saepe
+        required: true
+        schema:
+          type: string
+  /maintenances/admin:
     get:
       summary: ''
       description: ''
@@ -27,16 +59,142 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        401:
           description: ''
           content:
             text/plain:
               schema:
                 type: string
-                example: 'Lumen (9.0.0) (Laravel Components ^9.0)'
+                example: Unauthorized.
       tags:
-        - Endpoints
+        - 'Maintenance management'
       security: []
+  /maintenances/admin/trashed:
+    get:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        401:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized.
+      tags:
+        - 'Maintenance management'
+      security: []
+  '/maintenances/admin/{id}/restore':
+    post:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Maintenance management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: ''
+        example: ut
+        required: true
+        schema:
+          type: string
+  '/maintenances/admin/{id}/delete':
+    delete:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Maintenance management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: ''
+        example: labore
+        required: true
+        schema:
+          type: string
+  '/maintenances/admin/{id}/force-delete':
+    delete:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Maintenance management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: ''
+        example: dicta
+        required: true
+        schema:
+          type: string
   /authentication:
     post:
       summary: 'Basic login'
@@ -72,7 +230,7 @@ paths:
                 type: string
                 example: "error\": {\n \"code\": 429,\n \"message\": \"Too Many Attempts.\"\n}"
       tags:
-        - Endpoints
+        - Authenticatie
       requestBody:
         required: true
         content:
@@ -87,7 +245,7 @@ paths:
                 password:
                   type: string
                   description: 'Password of the user.'
-                  example: debitis
+                  example: velit
               required:
                 - email
                 - password
@@ -127,8 +285,1038 @@ paths:
                 type: string
                 example: "error\": {\n \"code\": 429,\n \"message\": \"Too Many Attempts.\"\n}"
       tags:
+        - Authenticatie
+  /authentication/register:
+    post:
+      summary: 'Gebruiker registratie'
+      description: "een gebruiker kan een account aanmaken bij ons. als dit request successvol is krijgt de gebruiker een validatie code in de mail.\nDe validatie code moet naar de validate endpoint gepost worden voor dat het account actief wordt.\nde gebruiker krijgt hier de meest basis rol."
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "\"success\": {\n \"message\": \"Successful\"\n}\n @response 422 \"error\": {\n \"code\": 422,\n \"message\": \"Invalid request.\"\n}"
+        429:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "\"error\": {\n \"code\": 429,\n \"message\": \"Too Many Attempts.\"\n}"
+      tags:
+        - Authenticatie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'email address van de gebruiker.'
+                  example: user@project.local
+                password:
+                  type: string
+                  description: 'nieuw wachtwoord.'
+                  example: asdasd
+              required:
+                - email
+                - password
+      security: []
+  '/authentication/{id}/Verify':
+    post:
+      summary: 'Sctiveer gebruikers account'
+      description: "na het ontvangen van de mail met de validate code.\nDeze moet door de gebruiker worden ingevoerd om te bevestigen dat die zij/haar account is"
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "\"success\": {\n \"message\": \"account gevalideerd\"\n}\n @response 422 \"error\": {\n \"code\": 422,\n \"message\": \"Invalid request.\"\n}"
+        429:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "\"error\": {\n \"code\": 429,\n \"message\": \"Too Many Attempts.\"\n}"
+      tags:
+        - Authenticatie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                validationCode:
+                  type: string
+                  description: 'deze code heeft de gebruiker in de mail gekregen.'
+                  example: quia
+              required:
+                - validationCode
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: ''
+        example: nostrum
+        required: true
+        schema:
+          type: string
+  /weather:
+    post:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
         - Endpoints
+      security: []
+  /sendWeatherData:
+    post:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+  /:
+    get:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'Lumen (9.0.2) (Laravel Components ^9.0)'
+      tags:
+        - Endpoints
+      security: []
+  /users:
+    get:
+      summary: 'Show my user profile'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Class "App\Http\Controllers\Auth" not found'
+                  exception: Error
+                  file: /var/www/html/app/Http/Controllers/UsersController.php
+                  line: 23
+                  trace:
+                    -
+                      file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                      line: 36
+                      function: view
+                      class: App\Http\Controllers\UsersController
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/illuminate/container/Util.php
+                      line: 41
+                      function: 'Illuminate\Container\{closure}'
+                      class: Illuminate\Container\BoundMethod
+                      type: '::'
+                    -
+                      file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                      line: 93
+                      function: unwrapIfClosure
+                      class: Illuminate\Container\Util
+                      type: '::'
+                    -
+                      file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                      line: 37
+                      function: callBoundMethod
+                      class: Illuminate\Container\BoundMethod
+                      type: '::'
+                    -
+                      file: /var/www/html/vendor/illuminate/container/Container.php
+                      line: 653
+                      function: call
+                      class: Illuminate\Container\BoundMethod
+                      type: '::'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                      line: 389
+                      function: call
+                      class: Illuminate\Container\Container
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                      line: 355
+                      function: callControllerCallable
+                      class: Laravel\Lumen\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                      line: 329
+                      function: callLumenController
+                      class: Laravel\Lumen\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                      line: 282
+                      function: callControllerAction
+                      class: Laravel\Lumen\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                      line: 267
+                      function: callActionOnArrayBasedRoute
+                      class: Laravel\Lumen\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                      line: 169
+                      function: handleFoundRoute
+                      class: Laravel\Lumen\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Routing/Pipeline.php
+                      line: 48
+                      function: 'Laravel\Lumen\Concerns\{closure}'
+                      class: Laravel\Lumen\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/app/Http/Middleware/RespondWithJsonMiddleware.php
+                      line: 20
+                      function: 'Laravel\Lumen\Routing\{closure}'
+                      class: Laravel\Lumen\Routing\Pipeline
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/illuminate/pipeline/Pipeline.php
+                      line: 180
+                      function: handle
+                      class: App\Http\Middleware\RespondWithJsonMiddleware
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Routing/Pipeline.php
+                      line: 30
+                      function: 'Illuminate\Pipeline\{closure}'
+                      class: Illuminate\Pipeline\Pipeline
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/illuminate/pipeline/Pipeline.php
+                      line: 116
+                      function: 'Laravel\Lumen\Routing\{closure}'
+                      class: Laravel\Lumen\Routing\Pipeline
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                      line: 426
+                      function: then
+                      class: Illuminate\Pipeline\Pipeline
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                      line: 175
+                      function: sendThroughPipeline
+                      class: Laravel\Lumen\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                      line: 95
+                      function: dispatch
+                      class: Laravel\Lumen\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php
+                      line: 308
+                      function: handle
+                      class: Laravel\Lumen\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php
+                      line: 287
+                      function: callLaravelOrLumenRoute
+                      class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php
+                      line: 89
+                      function: makeApiCall
+                      class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php
+                      line: 45
+                      function: makeResponseCall
+                      class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php
+                      line: 35
+                      function: makeResponseCallIfConditionsPass
+                      class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php
+                      line: 222
+                      function: __invoke
+                      class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php
+                      line: 179
+                      function: iterateThroughStrategies
+                      class: Knuckles\Scribe\Extracting\Extractor
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php
+                      line: 116
+                      function: fetchResponses
+                      class: Knuckles\Scribe\Extracting\Extractor
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php
+                      line: 117
+                      function: processRoute
+                      class: Knuckles\Scribe\Extracting\Extractor
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php
+                      line: 75
+                      function: extractEndpointsInfoFromLaravelApp
+                      class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php
+                      line: 51
+                      function: extractEndpointsInfoAndWriteToDisk
+                      class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/knuckleswtf/scribe/src/Commands/GenerateDocumentation.php
+                      line: 50
+                      function: get
+                      class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                      line: 36
+                      function: handle
+                      class: Knuckles\Scribe\Commands\GenerateDocumentation
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/illuminate/container/Util.php
+                      line: 41
+                      function: 'Illuminate\Container\{closure}'
+                      class: Illuminate\Container\BoundMethod
+                      type: '::'
+                    -
+                      file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                      line: 93
+                      function: unwrapIfClosure
+                      class: Illuminate\Container\Util
+                      type: '::'
+                    -
+                      file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                      line: 37
+                      function: callBoundMethod
+                      class: Illuminate\Container\BoundMethod
+                      type: '::'
+                    -
+                      file: /var/www/html/vendor/illuminate/container/Container.php
+                      line: 653
+                      function: call
+                      class: Illuminate\Container\BoundMethod
+                      type: '::'
+                    -
+                      file: /var/www/html/vendor/illuminate/console/Command.php
+                      line: 171
+                      function: call
+                      class: Illuminate\Container\Container
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/symfony/console/Command/Command.php
+                      line: 291
+                      function: execute
+                      class: Illuminate\Console\Command
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/illuminate/console/Command.php
+                      line: 156
+                      function: run
+                      class: Symfony\Component\Console\Command\Command
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/symfony/console/Application.php
+                      line: 989
+                      function: run
+                      class: Illuminate\Console\Command
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/symfony/console/Application.php
+                      line: 299
+                      function: doRunCommand
+                      class: Symfony\Component\Console\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/symfony/console/Application.php
+                      line: 171
+                      function: doRun
+                      class: Symfony\Component\Console\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/illuminate/console/Application.php
+                      line: 102
+                      function: run
+                      class: Symfony\Component\Console\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/vendor/laravel/lumen-framework/src/Console/Kernel.php
+                      line: 116
+                      function: run
+                      class: Illuminate\Console\Application
+                      type: '->'
+                    -
+                      file: /var/www/html/artisan
+                      line: 35
+                      function: handle
+                      class: Laravel\Lumen\Console\Kernel
+                      type: '->'
+                properties:
+                  message:
+                    type: string
+                    example: 'Class "App\Http\Controllers\Auth" not found'
+                  exception:
+                    type: string
+                    example: Error
+                  file:
+                    type: string
+                    example: /var/www/html/app/Http/Controllers/UsersController.php
+                  line:
+                    type: integer
+                    example: 23
+                  trace:
+                    type: array
+                    example:
+                      -
+                        file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                        line: 36
+                        function: view
+                        class: App\Http\Controllers\UsersController
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/illuminate/container/Util.php
+                        line: 41
+                        function: 'Illuminate\Container\{closure}'
+                        class: Illuminate\Container\BoundMethod
+                        type: '::'
+                      -
+                        file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                        line: 93
+                        function: unwrapIfClosure
+                        class: Illuminate\Container\Util
+                        type: '::'
+                      -
+                        file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                        line: 37
+                        function: callBoundMethod
+                        class: Illuminate\Container\BoundMethod
+                        type: '::'
+                      -
+                        file: /var/www/html/vendor/illuminate/container/Container.php
+                        line: 653
+                        function: call
+                        class: Illuminate\Container\BoundMethod
+                        type: '::'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                        line: 389
+                        function: call
+                        class: Illuminate\Container\Container
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                        line: 355
+                        function: callControllerCallable
+                        class: Laravel\Lumen\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                        line: 329
+                        function: callLumenController
+                        class: Laravel\Lumen\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                        line: 282
+                        function: callControllerAction
+                        class: Laravel\Lumen\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                        line: 267
+                        function: callActionOnArrayBasedRoute
+                        class: Laravel\Lumen\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                        line: 169
+                        function: handleFoundRoute
+                        class: Laravel\Lumen\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Routing/Pipeline.php
+                        line: 48
+                        function: 'Laravel\Lumen\Concerns\{closure}'
+                        class: Laravel\Lumen\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/app/Http/Middleware/RespondWithJsonMiddleware.php
+                        line: 20
+                        function: 'Laravel\Lumen\Routing\{closure}'
+                        class: Laravel\Lumen\Routing\Pipeline
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/illuminate/pipeline/Pipeline.php
+                        line: 180
+                        function: handle
+                        class: App\Http\Middleware\RespondWithJsonMiddleware
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Routing/Pipeline.php
+                        line: 30
+                        function: 'Illuminate\Pipeline\{closure}'
+                        class: Illuminate\Pipeline\Pipeline
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/illuminate/pipeline/Pipeline.php
+                        line: 116
+                        function: 'Laravel\Lumen\Routing\{closure}'
+                        class: Laravel\Lumen\Routing\Pipeline
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                        line: 426
+                        function: then
+                        class: Illuminate\Pipeline\Pipeline
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                        line: 175
+                        function: sendThroughPipeline
+                        class: Laravel\Lumen\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php
+                        line: 95
+                        function: dispatch
+                        class: Laravel\Lumen\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php
+                        line: 308
+                        function: handle
+                        class: Laravel\Lumen\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php
+                        line: 287
+                        function: callLaravelOrLumenRoute
+                        class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php
+                        line: 89
+                        function: makeApiCall
+                        class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php
+                        line: 45
+                        function: makeResponseCall
+                        class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php
+                        line: 35
+                        function: makeResponseCallIfConditionsPass
+                        class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php
+                        line: 222
+                        function: __invoke
+                        class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php
+                        line: 179
+                        function: iterateThroughStrategies
+                        class: Knuckles\Scribe\Extracting\Extractor
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php
+                        line: 116
+                        function: fetchResponses
+                        class: Knuckles\Scribe\Extracting\Extractor
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php
+                        line: 117
+                        function: processRoute
+                        class: Knuckles\Scribe\Extracting\Extractor
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php
+                        line: 75
+                        function: extractEndpointsInfoFromLaravelApp
+                        class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php
+                        line: 51
+                        function: extractEndpointsInfoAndWriteToDisk
+                        class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/knuckleswtf/scribe/src/Commands/GenerateDocumentation.php
+                        line: 50
+                        function: get
+                        class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                        line: 36
+                        function: handle
+                        class: Knuckles\Scribe\Commands\GenerateDocumentation
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/illuminate/container/Util.php
+                        line: 41
+                        function: 'Illuminate\Container\{closure}'
+                        class: Illuminate\Container\BoundMethod
+                        type: '::'
+                      -
+                        file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                        line: 93
+                        function: unwrapIfClosure
+                        class: Illuminate\Container\Util
+                        type: '::'
+                      -
+                        file: /var/www/html/vendor/illuminate/container/BoundMethod.php
+                        line: 37
+                        function: callBoundMethod
+                        class: Illuminate\Container\BoundMethod
+                        type: '::'
+                      -
+                        file: /var/www/html/vendor/illuminate/container/Container.php
+                        line: 653
+                        function: call
+                        class: Illuminate\Container\BoundMethod
+                        type: '::'
+                      -
+                        file: /var/www/html/vendor/illuminate/console/Command.php
+                        line: 171
+                        function: call
+                        class: Illuminate\Container\Container
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/symfony/console/Command/Command.php
+                        line: 291
+                        function: execute
+                        class: Illuminate\Console\Command
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/illuminate/console/Command.php
+                        line: 156
+                        function: run
+                        class: Symfony\Component\Console\Command\Command
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/symfony/console/Application.php
+                        line: 989
+                        function: run
+                        class: Illuminate\Console\Command
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/symfony/console/Application.php
+                        line: 299
+                        function: doRunCommand
+                        class: Symfony\Component\Console\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/symfony/console/Application.php
+                        line: 171
+                        function: doRun
+                        class: Symfony\Component\Console\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/illuminate/console/Application.php
+                        line: 102
+                        function: run
+                        class: Symfony\Component\Console\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/vendor/laravel/lumen-framework/src/Console/Kernel.php
+                        line: 116
+                        function: run
+                        class: Illuminate\Console\Application
+                        type: '->'
+                      -
+                        file: /var/www/html/artisan
+                        line: 35
+                        function: handle
+                        class: Laravel\Lumen\Console\Kernel
+                        type: '->'
+                    items:
+                      type: object
+      tags:
+        - 'User management'
+      security: []
+    post:
+      summary: 'Update my profile'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User management'
+      security: []
+  /users/delete:
+    delete:
+      summary: 'Delete my account'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User management'
+      security: []
+  /users/admin:
+    get:
+      summary: 'Summary of all users'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        401:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized.
+      tags:
+        - 'User management'
+      security: []
+    post:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: page
+        description: 'Optional parameter. number of page.'
+        required: true
+        schema:
+          type: integer
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: 17
+  /users/admin/trashed:
+    get:
+      summary: 'Summary of all deleted users'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        401:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized.
+      tags:
+        - 'User management'
+      security: []
+  '/users/admin/{id}/restore':
+    post:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: ''
+        example: voluptas
+        required: true
+        schema:
+          type: string
+  '/users/admin/{id}/delete':
+    delete:
+      summary: 'Force delete a user'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: ''
+        example: rerum
+        required: true
+        schema:
+          type: string
+  '/users/admin/{id}/force-delete':
+    delete:
+      summary: 'Force delete a user'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: ''
+        example: minus
+        required: true
+        schema:
+          type: string
 tags:
+  -
+    name: 'Maintenance management'
+    description: "\nAPIs for managing maintenances"
+  -
+    name: Authenticatie
+    description: ''
   -
     name: Endpoints
     description: ''
+  -
+    name: 'User management'
+    description: "\nAPIs for managing users"

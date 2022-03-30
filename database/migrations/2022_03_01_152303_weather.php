@@ -27,13 +27,13 @@ return new class extends Migration
         });
 
         Schema::create('stations', function (Blueprint $blueprint){
-            $blueprint->uuid('id')->primary()->default('uuid()');
+            $blueprint->integer('id')->primary();
             $blueprint->string('name');
-            $blueprint->float('latitude');
-            $blueprint->float('longitude');
-            $blueprint->string('country');
-            $blueprint->uuid('timezone_id')->index();
-            $blueprint->uuid('created_by')->index();
+            $blueprint->float('latitude')->nullable();
+            $blueprint->float('longitude')->nullable();
+            $blueprint->string('country')->nullable();
+            $blueprint->uuid('timezone_id')->nullable()->index();
+            $blueprint->uuid('created_by')->nullable()->index();
             $blueprint->uuid('updated_by')->index()->nullable();
             $blueprint->timestamps();
             $blueprint->softDeletes();
@@ -44,9 +44,11 @@ return new class extends Migration
         });
 
         Schema::create('measurements', function (Blueprint $blueprint){
-            $blueprint->uuid('id')->primary()->default('uuid()');
-            $blueprint->uuid('station_id')->index();
-            $blueprint->double('temperature');
+            $blueprint->uuid('id')->primary()->default(DB::raw('(UUID())'));
+            $blueprint->integer('STN');
+            $blueprint->date('DATE');
+            $blueprint->time('TIME');
+            $blueprint->double('TEMP');
             $blueprint->double('DEWP');
             $blueprint->double('STP');
             $blueprint->double('SLP');
@@ -57,14 +59,6 @@ return new class extends Migration
             $blueprint->double('CLDC');
             $blueprint->double('WNDDIR');
             $blueprint->char('FRSHTT',6);
-            $blueprint->uuid('created_by')->index();
-            $blueprint->uuid('updated_by')->index()->nullable();
-            $blueprint->timestamps();
-            $blueprint->softDeletes();
-
-            $blueprint->foreign('station_id')->references('id')->on('stations');
-            $blueprint->foreign('created_by')->references('id')->on('users');
-            $blueprint->foreign('updated_by')->references('id')->on('users');
         });
 
         /**
@@ -73,8 +67,8 @@ return new class extends Migration
          * Eerst wordt er een database functie aangemaakt die het pertage verschillen tussen de niueuw en de laatste 30 uitrekenend toegevoegd
          * Die wordt gebruiker in een trigger als het blijt dat het verschill grooter van 19 procent is krijg je een 45000 error terug van de database
          */
-        DB::unprepared('create definer = root@`%` procedure validTemperatureCheck(IN stationID char(36), IN newThmperature double, OUT valid tinyint(1)) begin declare temperatureAvg int; select (round((avg(temperature)/newThmperature)*100) > 20) into temperatureAvg from measurements where station_id collate utf8mb4_general_ci = stationID order by created_by asc limit 30; if(temperatureAvg is null or temperatureAvg > 19) then select false into valid; else select true into valid; end if; end');
-        DB::unprepared('create definer = root@`%` trigger trigger_validate_temperature_before_insert before insert on measurements for each row begin set @stationID = null; set @newThmperature = 0.0; call validTemperatureCheck(new.station_id, new.temperature, @valid); if(@valid < 0) then signal sqlstate \'45000\' set message_text = \'Invalid record\'; end if; end;');
+     //   DB::unprepared('create definer = root@`%` procedure validTemperatureCheck(IN stationID char(36), IN newThmperature double, OUT valid tinyint(1)) begin declare temperatureAvg int; select (round((avg(temperature)/newThmperature)*100) > 20) into temperatureAvg from measurements where station_id collate utf8mb4_general_ci = stationID order by created_by asc limit 30; if(temperatureAvg is null or temperatureAvg > 19) then select false into valid; else select true into valid; end if; end');
+      //  DB::unprepared('create definer = root@`%` trigger trigger_validate_temperature_before_insert before insert on measurements for each row begin set @stationID = null; set @newThmperature = 0.0; call validTemperatureCheck(new.station_id, new.temperature, @valid); if(@valid < 0) then signal sqlstate \'45000\' set message_text = \'Invalid record\'; end if; end;');
     }
 
 

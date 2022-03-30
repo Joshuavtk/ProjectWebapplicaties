@@ -44,4 +44,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public $incrementing = false;
     protected $keyType = 'string';
+
+    public function maintenances(){
+        return $this->hasMany(Maintenance::class,'created_by','user_id');
+    }
 }

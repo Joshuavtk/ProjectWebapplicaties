@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Authentication;
 
 use App\Http\Controllers\Controller;
 
+/**
+ * @group Authenticatie
+ */
 class RecoverController extends Controller
 {
     /**

@@ -15,35 +15,11 @@ use Laravel\Lumen\Auth\Authorizable;
 
 class Measurement extends Model
 {
-    use  Authorizable, HasFactory, EncryptPassword, Blendable, SoftDeletes;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [];
-
-    /**
-     * All visable attribute when toArray is called.
-     *
-     * @var string[]
-     */
-    protected $visible = [];
-
-    public $incrementing = false;
-    protected $keyType = 'string';
-
+     protected $fillable = ['STN','TEMP','TEMP','DEWP','STP','SLP','VISIB','WDSP','PRCP','SNDP','FRSHTT','CLDC','WNDDIR'];
+    public $timestamps = false;
     //Geeft het timezone object terug
     public function station(): HasOne
     {
-        return $this->hasOne(Station::class, 'station_id', 'id');
+        return $this->hasOne(Stations::class, 'STN', 'id');
     }
 }

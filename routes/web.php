@@ -45,4 +45,5 @@ $router->group(['prefix' => 'authentication','middleware' => ['throttle:10,1']],
 //    });
 //});
 
-
+$router->post('/sendWeatherData', 'WeatherStationsController@receive');
+$router->get('/getWeatherData', 'WeatherStationsController@get');

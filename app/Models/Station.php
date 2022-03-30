@@ -2,13 +2,55 @@
 
 namespace App\Models;
 
+use App\Traits\Blendable;
+use App\Traits\EncryptPassword;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Lumen\Auth\Authorizable;
 
 class Station extends Model
 {
-    protected $table = 'station';
+    use  Authorizable, HasFactory, EncryptPassword, Blendable, SoftDeletes;
 
-    protected $primaryKey = 'name';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [];
+
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [];
+
+    /**
+     * All visable attribute when toArray is called.
+     *
+     * @var string[]
+     */
+    protected $visible = [];
 
     public $incrementing = false;
+    protected $keyType = 'string';
+
+    //Geeft het timezone object terug
+    public function timezone(): HasOne
+    {
+        return $this->hasOne(Timezone::class, 'timezone_id', 'id');
+    }
+
+    //Geeft een collectie van alle measurements terug
+    public function measurements(): HasMany
+    {
+        return $this->hasMany(Measurement::class, 'id', 'station_id');
+    }
 }

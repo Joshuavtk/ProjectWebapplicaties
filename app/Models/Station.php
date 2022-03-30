@@ -16,14 +16,14 @@ use Laravel\Lumen\Auth\Authorizable;
 
 class Station extends Model
 {
-    use  Authorizable, HasFactory, EncryptPassword, Blendable, SoftDeletes;
+    use  Authorizable, HasFactory, EncryptPassword, Blendable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['name', 'longitude', 'latitude', 'elevation'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -37,10 +37,12 @@ class Station extends Model
      *
      * @var string[]
      */
-    protected $visible = [];
+    protected $visible = ['name', 'longitude', 'latitude', 'elevation'];
 
     public $incrementing = false;
     protected $keyType = 'string';
+
+    protected $primaryKey = 'name';
 
     //Geeft het timezone object terug
     public function timezone(): HasOne
@@ -52,5 +54,12 @@ class Station extends Model
     public function measurements(): HasMany
     {
         return $this->hasMany(Measurement::class, 'id', 'station_id');
+    }
+
+    protected $table = 'station';
+
+    public function weatherData(): HasMany
+    {
+        return $this->hasMany(WeatherData::class, 'station_name', 'name');
     }
 }

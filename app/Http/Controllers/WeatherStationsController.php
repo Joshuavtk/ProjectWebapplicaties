@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Station;
 use App\Models\WeatherData;
 use http\Exception\BadMethodCallException;
 use Illuminate\Http\Request;
@@ -55,11 +56,21 @@ class WeatherStationsController extends Controller
             $data->wind_direction = $row['WNDDIR'] == "None" ? null : $row['WNDDIR'];
 
             $data->save();
-        }   
+        }
         return "Success";
     }
 
     public function get() {
         return WeatherData::all();
+    }
+
+    public function showStation($station_name) {
+        $station = Station::all()->where('name', '=', $station_name)->first();
+        return ['station' => $station, 'measurements' => $station->weatherData];
+    }
+
+    public function getStations()
+    {
+        return Station::with('weatherData')->has('weatherData')->get();
     }
 }

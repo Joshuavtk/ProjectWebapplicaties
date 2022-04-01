@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'authentication','middleware' => ['throttle:10,1']], function () use ($router){
+$router->group(['prefix' => 'authentication', 'middleware' => ['throttle:10,1']], function () use ($router) {
     $router->post('/', 'Authentication\AuthenticateController@basic');
     $router->group(['middleware' => ['auth']], function () use ($router) {
         $router->get('/jwt', 'Authentication\AuthenticateController@jwt');
@@ -45,7 +45,10 @@ $router->group(['prefix' => 'authentication','middleware' => ['throttle:10,1']],
 //    });
 //});
 
-$router->post('/sendWeatherData', 'WeatherStationsController@receive');
-$router->get('/getWeatherData', 'WeatherStationsController@get');
-$router->get('/getStations','WeatherStationsController@getStations');
-$router->get('/getWeatherData/{station_name}', 'WeatherStationsController@showStation');
+$router->group(['prefix' => 'api'], function () use ($router) {
+
+    $router->post('/sendWeatherData', 'WeatherStationsController@receive');
+    $router->get('/getWeatherData', 'WeatherStationsController@get');
+    $router->get('/getStations', 'WeatherStationsController@getStations');
+    $router->get('/getWeatherData/{station_name}', 'WeatherStationsController@showStation');
+});

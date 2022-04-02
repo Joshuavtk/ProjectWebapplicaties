@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+use Illuminate\Routing\Middleware\ThrottleRequests;
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -72,14 +74,19 @@ $app->configure('app');
 | route or middleware that'll be assigned to some specific routes.
 |
 */
+$app->register(Fruitcake\Cors\CorsServiceProvider::class);
+$app->configure('cors');
+$app->middleware([
+    \Fruitcake\Cors\HandleCors::class,
+]);
 
- $app->middleware([
-     App\Http\Middleware\RespondWithJsonMiddleware::class
- ]);
 
- $app->routeMiddleware([
-     'auth' => App\Http\Middleware\Authenticate::class,
- ]);
+ $app->middleware([App\Http\Middleware\RespondWithJsonMiddleware::class]);
+
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+   // 'throttle' => ThrottleRequests::class
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -93,7 +100,7 @@ $app->configure('app');
 */
 
 // $app->register(App\Providers\AppServiceProvider::class);
- $app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
@@ -117,7 +124,7 @@ if (class_exists(\Knuckles\Scribe\ScribeServiceProvider::class)) {
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
 
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);

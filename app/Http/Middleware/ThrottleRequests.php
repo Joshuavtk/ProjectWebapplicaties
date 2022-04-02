@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace Illuminate\Routing\Middleware;
 
 use Closure;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Cache\RateLimiting\Unlimited;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Str;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -83,7 +81,7 @@ class ThrottleRequests
      */
     protected function handleRequestUsingNamedLimiter($request, Closure $next, $limiterName, Closure $limiter)
     {
-        $limiterResponse = call_user_func($limiter, $request);
+        $limiterResponse = $limiter($request);
 
         if ($limiterResponse instanceof Response) {
             return $limiterResponse;
@@ -147,7 +145,7 @@ class ThrottleRequests
      */
     protected function resolveMaxAttempts($request, $maxAttempts)
     {
-        if (Str::contains($maxAttempts, '|')) {
+        if (str_contains($maxAttempts, '|')) {
             $maxAttempts = explode('|', $maxAttempts, 2)[$request->user() ? 1 : 0];
         }
 
@@ -171,7 +169,7 @@ class ThrottleRequests
         if ($user = $request->user()) {
             return sha1($user->getAuthIdentifier());
         } elseif ($route = $request->route()) {
-            return sha1(substr($_SERVER['APP_URL'], 7).'|'.$request->ip());
+            return sha1($route->getDomain().'|'.$request->ip());
         }
 
         throw new RuntimeException('Unable to generate the request signature. Route unavailable.');
@@ -197,8 +195,8 @@ class ThrottleRequests
         );
 
         return is_callable($responseCallback)
-                    ? new HttpResponseException($responseCallback($request, $headers))
-                    : new ThrottleRequestsException('Too Many Attempts.', null, $headers);
+            ? new HttpResponseException($responseCallback($request, $headers))
+            : new ThrottleRequestsException('Too Many Attempts.', null, $headers);
     }
 
     /**

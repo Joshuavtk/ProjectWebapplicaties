@@ -12,12 +12,12 @@ use Illuminate\Http\Request;
 
 class WeatherStationsController extends Controller
 {
-    public function create(Request $request)
-    {
-
-            dd(Measurement::insert($request->json('WEATHERDATA')));
-        return Measurement::create();
-    }
+//    public function create(Request $request)
+//    {
+//
+//        Measurement::insert($request->json('WEATHERDATA')));
+//        return Measurement::create();
+//    }
 
     public function index()
     {
@@ -61,5 +61,19 @@ class WeatherStationsController extends Controller
             $data->save();
         }
         return "Success";
+    }
+
+    public function get() {
+        return WeatherData::all();
+    }
+
+    public function showStation($station_name) {
+        $station = Station::all()->where('name', '=', $station_name)->first();
+        return ['station' => $station, 'measurements' => $station->weatherData];
+    }
+
+    public function getStations()
+    {
+        return Station::with('weatherData')->has('weatherData')->get();
     }
 }

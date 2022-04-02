@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'authentication'], function () use ($router) {
+$router->group(['prefix' => 'authentication', 'middleware' => ['throttle:10,1']], function () use ($router) {
     $router->post('/', 'Authentication\AuthenticateController@basic');
     $router->post('/register', 'Authentication\RegisterController@register');
     $router->post('/{id}/Verify', 'Authentication\RegisterController@Verify');
@@ -43,7 +43,7 @@ $router->group(['prefix' => 'users', 'middleware' => ['auth']], function () use 
         $router->delete('/{id}/force-delete', 'Admin\UsersController@forceDelete');
     });
 });
-//
+
 $router->group(['prefix' => 'maintenances', 'middleware' => ['auth']], function () use ($router) {
     $router->get('/{id}', 'MaintenancesController@view');
     $router->post('/{id}', 'MaintenancesController@update');
@@ -61,24 +61,16 @@ $router->group(['prefix' => 'maintenances', 'middleware' => ['auth']], function 
     });
 });
 
-
-//$router->group(['prefix' => 'maintenances', 'middleware' => ['throttle:1000,1']], function () use ($router) {
-//
-//
-//    $router->group(['prefix' => '/admin', 'middleware' => ['auth']], function () use ($router) {
-//        $router->get('/', 'Admin\UsersController@index');
-//        $router->get('/{id}', 'Admin\UsersController@view');
-//        $router->post('/', 'Admin\UsersController@create');
-//        $router->put('/', 'Admin\UsersController@update');
-//        $router->get('/trashed', 'Admin\UsersController@trashed');
-//        $router->post('/{id}/restore', 'Admin\UsersController@restore');
-//        $router->delete('/{id}/delete', 'Admin\UsersController@forceDelete');
-//        $router->delete('/{id}/force-delete', 'Admin\UsersController@forceDelete');
-//    });
-//});
 $router->group(['prefix' => 'weather'], function () use ($router) {
     $router->post('/', 'WeatherStationsController@create');
     //$router->get('/', 'WeatherStationsController@index');
 });
 
-$router->post('/sendWeatherData', 'WeatherStationsController@receive');
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+
+    $router->post('/sendWeatherData', 'WeatherStationsController@receive');
+    $router->get('/getWeatherData', 'WeatherStationsController@get');
+    $router->get('/getStations', 'WeatherStationsController@getStations');
+    $router->get('/getWeatherData/{station_name}', 'WeatherStationsController@showStation');
+});

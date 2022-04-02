@@ -10,7 +10,7 @@
 | is ready to receive HTTP / Console requests from the environment.
 |
 */
-
+error_reporting(E_ALL ^ E_NOTICE);
 $app = require __DIR__.'/../bootstrap/app.php';
 
 /*

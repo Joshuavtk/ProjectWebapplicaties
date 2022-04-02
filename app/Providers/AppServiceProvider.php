@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,6 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Gate::define('admin', fn($user) => $user->role == User::USER_ROLE_ADMIN);
+        Gate::define('manage-maintenances', fn($user, $model) => $user->maintenances()->pluck('id')->contains($model->id) || Gate::check('admin'));
     }
 }

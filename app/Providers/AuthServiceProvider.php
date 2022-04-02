@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Firebase\JWT\JWK;
+use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,17 +34,13 @@ class AuthServiceProvider extends ServiceProvider
 
 
         $this->app['auth']->viaRequest('api', function ($request) {
-            $token = $request->get('token') ?? $request->bearerToken();
-            if ($token) {
                 try {
-                    $jwtDecode = JWT::decode($request->bearerToken(), config('jwt.key'), [config('jwt.alg')]);
-                    return User::findOrFail($jwtDecode->id);
+                     JWT::decode($request->bearerToken(), config('jwt.key'), [config('jwt.alg')]);
+                     $jwtDecode = JWT::decode($request->bearerToken(), config('jwt.key'), [config('jwt.alg')]);
+                     return User::findOrFail($jwtDecode->id);
                 } catch (ExpiredException $e) {
                     //Provided token is expired.
-                } catch (Exception $e) {
-                    //An error while decoding token.
                 }
-            }
         });
     }
 }

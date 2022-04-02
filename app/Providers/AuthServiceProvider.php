@@ -34,13 +34,13 @@ class AuthServiceProvider extends ServiceProvider
 
 
         $this->app['auth']->viaRequest('api', function ($request) {
-                try {
-                     JWT::decode($request->bearerToken(), config('jwt.key'), [config('jwt.alg')]);
-                     $jwtDecode = JWT::decode($request->bearerToken(), config('jwt.key'), [config('jwt.alg')]);
-                     return User::findOrFail($jwtDecode->id);
-                } catch (ExpiredException $e) {
-                    //Provided token is expired.
-                }
+//                try {
+//                     JWT::decode($request->bearerToken(), config('jwt.key'), [config('jwt.alg')]);
+//                     $jwtDecode = JWT::decode($request->bearerToken(), config('jwt.key'), [config('jwt.alg')]);
+//                     return User::findOrFail($jwtDecode->id);
+//                } catch (ExpiredException $e) {
+//                    //Provided token is expired.
+//                }
         });
     }
 }

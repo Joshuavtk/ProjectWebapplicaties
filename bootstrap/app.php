@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Routing\Middleware\ThrottleRequests;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
@@ -81,7 +83,10 @@ $app->middleware([
 
  $app->middleware([App\Http\Middleware\RespondWithJsonMiddleware::class]);
 
-$app->routeMiddleware(['auth' => App\Http\Middleware\Authenticate::class,]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+   // 'throttle' => ThrottleRequests::class
+]);
 
 /*
 |--------------------------------------------------------------------------

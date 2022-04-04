@@ -59,8 +59,11 @@ class MaintenancesController extends Controller
 
     private function validateRequest(Request $request)
     {
-        return $this->validate($request, []);
+        return $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'station_id' => 'required|uuid|exists:stations,id',
+            'datetime' => 'required|datetime',
+            'description' => 'required|string',
+        ]);
     }
-
-
 }

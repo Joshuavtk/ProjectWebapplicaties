@@ -39,10 +39,15 @@ class Station extends Model
      */
     protected $visible = ['name', 'longitude', 'latitude', 'elevation'];
 
+    /**
+     * @var bool
+     */
     public $incrementing = false;
-    protected $keyType = 'string';
 
-    protected $primaryKey = 'name';
+    /**
+     * @var string
+     */
+    protected $keyType = 'string';
 
     //Geeft het timezone object terug
     public function timezone(): HasOne
@@ -55,8 +60,6 @@ class Station extends Model
     {
         return $this->hasMany(Measurement::class, 'id', 'station_id');
     }
-
-    protected $table = 'station';
 
     public function weatherData(): HasMany
     {

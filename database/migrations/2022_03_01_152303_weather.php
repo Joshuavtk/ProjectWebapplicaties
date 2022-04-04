@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('timezones', function (Blueprint $blueprint){
-            $blueprint->uuid('id')->primary()->default('uuid()');
+            $blueprint->uuid('id')->primary()->default(DB::raw('(UUID())'));
             $blueprint->integer('offset');
             $blueprint->text('description');
             $blueprint->uuid('created_by')->index();

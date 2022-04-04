@@ -56,8 +56,6 @@ class Station extends Model
         return $this->hasMany(Measurement::class, 'id', 'station_id');
     }
 
-    protected $table = 'station';
-
     public function weatherData(): HasMany
     {
         return $this->hasMany(WeatherData::class, 'station_name', 'name');

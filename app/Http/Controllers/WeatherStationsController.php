@@ -6,6 +6,7 @@ use App\Http\Resources\StationCollection;
 use App\Http\Resources\StationResource;
 use App\Http\Resources\WeatherCollection;
 use App\Models\Measurement;
+use App\Models\Station;
 use App\Models\Stations;
 use App\Models\WeatherData;
 use Illuminate\Http\Request;

@@ -1,7 +1,8 @@
 import axiosProvider from 'axios'
 
 export const axios = axiosProvider.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: 'http://127.0.0.1:80/ProjectWebapplicaties/public/',
+  // baseURL: 'http://localhost:8000/api',
 })
 let user = JSON.parse(localStorage.getItem('user'))
 const cookieToken = document.cookie.replace(/(?:(?:^|.*;\s*)api_token\s*=\s*([^;]*).*$)|^.*$/, '$1')

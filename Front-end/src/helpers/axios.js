@@ -1,22 +1,25 @@
-import axiosProvider from 'axios'
+import axiosProvider from "axios";
 
 export const axios = axiosProvider.create({
-  baseURL: 'http://localhost:8000/api',
-})
-let user = JSON.parse(localStorage.getItem('user'))
-const cookieToken = document.cookie.replace(/(?:(?:^|.*;\s*)api_token\s*=\s*([^;]*).*$)|^.*$/, '$1')
+    baseURL: "http://localhost:8000/api",
+});
+let user = JSON.parse(localStorage.getItem("user"));
+const cookieToken = document.cookie.replace(
+    /(?:(?:^|.*;\s*)api_token\s*=\s*([^;]*).*$)|^.*$/,
+    "$1"
+);
 
-let apiToken = null
+let apiToken = null;
 if (user) {
-  apiToken = user.api_token
+    apiToken = user.api_token;
 } else if (cookieToken) {
-  apiToken = cookieToken
+    apiToken = cookieToken;
 }
 
 if (apiToken) {
-  axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken
+    axios.defaults.headers.common["Authorization"] = "Bearer " + apiToken;
 } else {
-  axios.defaults.headers.common = {}
+    axios.defaults.headers.common = {};
 }
 
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";

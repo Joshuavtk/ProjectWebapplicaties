@@ -27,7 +27,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-    protected $fillable = ['email', 'password','role'];
+    protected $fillable = ['email','subscription_id' ,'password','role'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -47,10 +47,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $keyType = 'string';
 
     public function maintenances(){
-        return $this->hasMany(Maintenance::class,'created_by','user_id');
+        return $this->hasMany(Maintenance::class,'created_by','id');
     }
 
     public function stations(){
-        return $this->hasMany(Station::class,'created_by','user_id');
+        return $this->hasMany(Station::class,'created_by','id');
+    }
+
+    public function subscription(){
+        return $this->hasOne(Subscription::class,'id','subscription');
     }
 }

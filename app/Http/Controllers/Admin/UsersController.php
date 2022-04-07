@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 /**
  * @group User management
@@ -62,5 +63,20 @@ class UsersController extends Controller
             return response(['message' => 'Restored Successfully'], 200);
 
         return response(['message' => 'Deleted user not found'], 404);
+    }
+
+    private function validateRequest(Request $request)
+    {
+        return $this->validate($request, [
+            'email' => 'required_without:password|email|unique:users', //email address must be unique
+            'password' => 'required|string',
+            'created_by,updated_by,deleted_by' => 'uuid|exists:users,id', //created by user must already exist
+            'subscription_id' => 'uuid|exists:users,id', //created by user must already exist
+            'role' => Rule::in([ //check for supported user roles
+                User::USER_ROLE_ADMIN,
+                User::USER_ROLE_USER,
+                User::USER_ROLE_STATION
+            ]),
+        ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Admin\Controller;
 use App\Models\Device;
 use App\Models\Maintenance;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +19,9 @@ class MaintenancesController extends Controller
 {
     public function index()
     {
-        return Maintenance::whereHas('users', fn($builder) => $builder->where(['user_id' => Auth::id()]))->paginate(Controller::PAGINATE_SIZE);
+        return Maintenance::paginate(Controller::PAGINATE_SIZE);
     }
+
 
     public function show(string $id)
     {

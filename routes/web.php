@@ -60,7 +60,8 @@ $router->group(['prefix' => 'maintenances', 'middleware' => ['auth']], function 
     });
 });
 
-$router->group(['prefix' => 'subscriptions', 'middleware' => ['auth']], function () use ($router) {
+$router->group(['prefix' => 'subscriptions'], function () use ($router) {
+    $router->get('/', 'SubscriptionController@index');
     $router->get('/{id}', 'SubscriptionController@view');
 
     $router->group(['prefix' => '/admin', 'middleware' => ['auth']], function () use ($router) {

@@ -28,14 +28,6 @@ class SubscriptionController extends Controller
         return $device;
     }
 
-    public function create(\Illuminate\Http\Request $request)
-    {
-        if (Subscription::updateOrCreate($this->validateRequest($request)))
-            return response('Save Successfully', 201);
-
-        return response('Not saved', 422);
-    }
-
     public function update(Request $request, string $id)
     {
         $device = Subscription::findOrFail($id);

@@ -21,6 +21,12 @@ return new class extends Migration
             $blueprint->timestamps();
             $blueprint->softDeletes();
         });
+
+        Schema::table('users', function(Blueprint $blueprint) {
+            $blueprint->uuid('subscription_id');
+            $blueprint->foreign('subscription_id')->references('id')->on('subscriptions');
+        });
+
     }
 
     /**

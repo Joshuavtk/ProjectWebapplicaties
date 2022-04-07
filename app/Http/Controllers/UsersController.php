@@ -64,6 +64,7 @@ class UsersController extends Controller
             'role' => Rule::in([ //check for supported user roles
                 User::USER_ROLE_ADMIN,
                 User::USER_ROLE_USER,
+                User::USER_ROLE_STATION
             ]),
         ]);
     }

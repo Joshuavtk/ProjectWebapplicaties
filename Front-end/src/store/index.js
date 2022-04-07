@@ -1,11 +1,10 @@
-import { createStore } from 'vuex'
-import { station } from '@/store/station'
-
+import { createStore } from "vuex";
+import { station } from "@/store/station";
 
 const store = createStore({
-  modules: {
-    station,
-  },
-})
+    modules: {
+        station,
+    },
+});
 
 export default store;

@@ -59,6 +59,21 @@ $router->group(['prefix' => 'maintenances', 'middleware' => ['auth']], function 
         $router->delete('/{id}/force-delete', 'Admin\MaintenancesController@forceDelete');
     });
 });
+
+$router->group(['prefix' => 'subscriptions', 'middleware' => ['auth']], function () use ($router) {
+    $router->get('/{id}', 'SubscriptionController@view');
+
+    $router->group(['prefix' => '/admin', 'middleware' => ['auth']], function () use ($router) {
+        $router->get('/', 'Admin\SubscriptionController@index');
+        $router->get('/trashed', 'Admin\SubscriptionController@trashed');
+        $router->get('/{id}', 'Admin\SubscriptionController@view');
+        $router->post('/', 'Admin\SubscriptionController@create');
+        $router->put('/', 'Admin\SubscriptionController@update');
+        $router->post('/{id}/restore', 'Admin\SubscriptionController@restore');
+        $router->delete('/{id}/delete', 'Admin\SubscriptionController@forceDelete');
+        $router->delete('/{id}/force-delete', 'Admin\SubscriptionController@forceDelete');
+    });
+});
 //
 //$router->group(['prefix' => 'weather'], function () use ($router) {
 //    $router->post('/', 'WeatherStationsController@create');

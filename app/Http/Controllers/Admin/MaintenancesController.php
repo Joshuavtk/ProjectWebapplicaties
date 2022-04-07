@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Device;
+use App\Models\Maintenance;
 
 /**
  * @group Maintenance management
@@ -19,21 +20,21 @@ class MaintenancesController extends Controller
     ///Admin functions
     public function index()
     {
-        return Device::paginate(Controller::PAGINATE_SIZE);
+        return Maintenance::paginate(Controller::PAGINATE_SIZE);
     }
 
     public function trashed()
     {
-        return Device::onlyTrashed()->paginate(Controller::PAGINATE_SIZE);
+        return Maintenance::onlyTrashed()->paginate(Controller::PAGINATE_SIZE);
     }
 
     public function forceDelete(string $id)
     {
-        if ((Device::findOrFail($id))->forceDelete())
+        if ((Maintenance::findOrFail($id))->forceDelete())
             return response(['message' => 'Deleted Successfully'], 200);
     }
     public function restore(string $id){
-        if ((Device::findOrFail($id))->restore())
+        if ((Maintenance::findOrFail($id))->restore())
             return response(['message' => 'Restore successfully'], 200);
     }
 }

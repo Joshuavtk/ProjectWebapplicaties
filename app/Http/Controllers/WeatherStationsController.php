@@ -6,9 +6,10 @@ use App\Http\Resources\StationCollection;
 use App\Http\Resources\StationResource;
 use App\Http\Resources\WeatherCollection;
 use App\Models\Measurement;
-use App\Models\Stations;
+use App\Models\Station;
 use App\Models\WeatherData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class WeatherStationsController extends Controller
 {
@@ -74,6 +75,6 @@ class WeatherStationsController extends Controller
 
     public function getStations()
     {
-        return Station::with('weatherData')->has('weatherData')->get();
+        return DB::table('station')->paginate(10);
     }
 }

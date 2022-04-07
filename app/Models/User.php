@@ -55,6 +55,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     public function subscription(){
-        return $this->hasOne(Subscription::class,'id','subscription');
+        return $this->hasOne(Subscription::class,'id','subscription_id');
     }
 }

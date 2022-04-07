@@ -1,13 +1,22 @@
-import { axios } from '@/helpers/axios'
+import { axios } from "@/helpers/axios";
 
 export const stationService = {
-    getStationData
-}
+    getStationData,
+    getStationsData,
+};
 
 function getStationData(stationName) {
-    return axios.get(`/getWeatherData/${stationName}`)
+    return axios
+        .get(`/getWeatherData/${stationName}`)
         .then(handleResponse)
-        .then(station => station)
+        .then((station) => station);
+}
+
+function getStationsData(pageNum) {
+    return axios
+        .get(`/getStations?page=${pageNum}`)
+        .then(handleResponse)
+        .then((stations) => stations);
 }
 
 function handleResponse(response) {
@@ -19,9 +28,10 @@ function handleResponse(response) {
         //     // location.reload()
         // }
         // TODO: add alert message
-        const error = (response.data && response.data.message) || response.statusText
-        return Promise.reject(error)
+        const error =
+            (response.data && response.data.message) || response.statusText;
+        return Promise.reject(error);
     }
 
-    return response.data
+    return response.data;
 }

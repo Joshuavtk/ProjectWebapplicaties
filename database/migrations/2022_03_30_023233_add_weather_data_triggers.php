@@ -69,35 +69,36 @@ return new class extends Migration {
              IF NEW.wind_direction IS NULL THEN
                 SELECT ROUND(SUM(lastValues.wind_direction) / COUNT(*), 1) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
                 SET NEW.wind_direction = @result;
+             END IF;
 
              IF NEW.frost IS NULL THEN
-                SELECT ROUND(SUM(lastValues.frost) / COUNT(*), 0) INTO @result FROM (SELECT * FROM measurements WHERE station_id = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
-                SET NEW.frost = @result
+                SELECT (SUM(lastValues.frost) > (COUNT(lastValues.frost) / 2)) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
+                SET NEW.frost = @result;
              END IF;
 
              IF NEW.rain IS NULL THEN
-                SELECT ROUND(SUM(lastValues.rain) / COUNT(*), 0) INTO @result FROM (SELECT * FROM measurements WHERE station_id = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
-                SET NEW.rain = @result
+                SELECT (SUM(lastValues.rain) > (COUNT(lastValues.rain) / 2)) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
+                SET NEW.rain = @result;
              END IF;
 
              IF NEW.snow IS NULL THEN
-                SELECT ROUND(SUM(lastValues.snow) / COUNT(*), 0) INTO @result FROM (SELECT * FROM measurements WHERE station_id = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
-                SET NEW.snow = @result
+                SELECT (SUM(lastValues.snow) > (COUNT(lastValues.snow) / 2)) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
+                SET NEW.snow = @result;
              END IF;
 
              IF NEW.hail IS NULL THEN
-                SELECT ROUND(SUM(lastValues.hail) / COUNT(*), 0) INTO @result FROM (SELECT * FROM measurements WHERE station_id = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
-                SET NEW.hail = @result
+                SELECT (SUM(lastValues.hail) > (COUNT(lastValues.hail) / 2)) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
+                SET NEW.hail = @result;
              END IF;
 
              IF NEW.thunderstorm IS NULL THEN
-                SELECT ROUND(SUM(lastValues.thunderstorm) / COUNT(*), 0) INTO @result FROM (SELECT * FROM measurements WHERE station_id = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
-                SET NEW.thunderstorm = @result
+                SELECT (SUM(lastValues.thunderstorm) > (COUNT(lastValues.thunderstorm) / 2)) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
+                SET NEW.thunderstorm = @result;
              END IF;
 
              IF NEW.tornado IS NULL THEN
-                SELECT ROUND(SUM(lastValues.tornado) / COUNT(*), 0) INTO @result FROM (SELECT * FROM measurements WHERE station_id = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
-                SET NEW.tornado = @result
+                SELECT (SUM(lastValues.tornado) > (COUNT(lastValues.tornado) / 2)) INTO @result FROM (SELECT * FROM weather_data WHERE station_name = NEW.station_name ORDER BY id DESC LIMIT 30) AS lastValues;
+                SET NEW.tornado = @result;
              END IF;
         END;
 ";

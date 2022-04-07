@@ -81,10 +81,10 @@ $router->group(['prefix' => 'subscriptions', 'middleware' => ['auth']], function
 //});
 //
 //
-//$router->group(['prefix' => 'api'], function () use ($router) {
-//
-//    $router->post('/sendWeatherData', 'WeatherStationsController@receive');
-//    $router->get('/getWeatherData', 'WeatherStationsController@get');
-//    $router->get('/getStations', 'WeatherStationsController@getStations');
-//    $router->get('/getWeatherData/{station_name}', 'WeatherStationsController@showStation');
-//});
+$router->group(['prefix' => 'api'], function () use ($router) {
+
+    $router->post('/sendWeatherData', 'WeatherStationsController@receive');
+    $router->get('/getWeatherData', 'WeatherStationsController@get');
+    $router->get('/getStations', 'WeatherStationsController@getStations');
+    $router->get('/getWeatherData/{station_name}', 'WeatherStationsController@showStation');
+});

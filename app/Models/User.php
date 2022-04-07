@@ -18,6 +18,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     const USER_ROLE_ADMIN   = 0;
     const USER_ROLE_USER = 1;
+    const USER_ROLE_STATION = 2;
 
     const SUBSCRIPTION_BASIC = 0;
 
@@ -47,5 +48,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function maintenances(){
         return $this->hasMany(Maintenance::class,'created_by','user_id');
+    }
+
+    public function stations(){
+        return $this->hasMany(Station::class,'created_by','user_id');
     }
 }

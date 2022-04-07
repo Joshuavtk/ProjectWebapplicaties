@@ -19,7 +19,7 @@ class SubscriptionController extends Controller
 {
     public function index()
     {
-        return Subscription::whereHas('users', fn($builder) => $builder->where(['user_id' => Auth::id()]))->paginate(Controller::PAGINATE_SIZE);
+        return Subscription::paginate(Controller::PAGINATE_SIZE);
     }
 
     public function show(string $id)

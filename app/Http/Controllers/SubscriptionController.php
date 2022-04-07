@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Device;
 use App\Models\Maintenance;
+use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -14,23 +15,22 @@ use Illuminate\Support\Facades\Gate;
  * APIs for managing maintenances
  */
 
-class MaintenancesController extends Controller
+class SubscriptionController extends Controller
 {
     public function index()
     {
-        return Maintenance::whereHas('users', fn($builder) => $builder->where(['user_id' => Auth::id()]))->paginate(Controller::PAGINATE_SIZE);
+        return Subscription::whereHas('users', fn($builder) => $builder->where(['user_id' => Auth::id()]))->paginate(Controller::PAGINATE_SIZE);
     }
 
     public function show(string $id)
     {
-        $device = Maintenance::findOrFail($id);
-        Gate::authorize('manage-maintenances',$device);
+        $device = Subscription::findOrFail($id);
         return $device;
     }
 
     public function create(\Illuminate\Http\Request $request)
     {
-        if (Maintenance::updateOrCreate($this->validateRequest($request)))
+        if (Subscription::updateOrCreate($this->validateRequest($request)))
             return response('Save Successfully', 201);
 
         return response('Not saved', 422);
@@ -38,8 +38,7 @@ class MaintenancesController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $device = Maintenance::findOrFail($id);
-        Gate::authorize('manage-maintenances',$device);
+        $device = Subscription::findOrFail($id);
 
         $request->request->add(['id' => $id]);
 
@@ -49,9 +48,7 @@ class MaintenancesController extends Controller
 
     public function destroy(string $id)
     {
-        $device = Maintenance::findOrFail($id);
-        Gate::authorize('manage-maintenances',$device);
-
+        $device = Subscription::findOrFail($id);
 
         if ($device->delete())
             return response(['message' => 'Deleted Successfully'], 200);
@@ -61,9 +58,8 @@ class MaintenancesController extends Controller
     {
         return $this->validate($request, [
             'name' => 'required|string|max:255',
-            'station_id' => 'required|uuid|exists:stations,id',
-            'datetime' => 'required|datetime',
-            'description' => 'required|string',
+            'times_day' => 'required|integer',
+            'times_hour' => 'required|integer',
         ]);
     }
 }

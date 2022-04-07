@@ -38,7 +38,7 @@ class MaintenancesController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $device = Device::findOrFail($id);
+        $device = Maintenance::findOrFail($id);
         Gate::authorize('manage-maintenances',$device);
 
         $request->request->add(['id' => $id]);
@@ -49,7 +49,7 @@ class MaintenancesController extends Controller
 
     public function destroy(string $id)
     {
-        $device = Device::findOrFail($id);
+        $device = Maintenance::findOrFail($id);
         Gate::authorize('manage-maintenances',$device);
 
 
@@ -59,8 +59,11 @@ class MaintenancesController extends Controller
 
     private function validateRequest(Request $request)
     {
-        return $this->validate($request, []);
+        return $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'station_id' => 'required|uuid|exists:stations,id',
+            'datetime' => 'required|datetime',
+            'description' => 'required|string',
+        ]);
     }
-
-
 }

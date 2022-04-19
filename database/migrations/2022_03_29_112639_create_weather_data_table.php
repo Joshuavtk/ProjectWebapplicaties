@@ -15,7 +15,7 @@ return new class extends Migration {
         Schema::create('weather_data', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('station_name', '10');
+            $table->mediumInteger('station_name');
 //            $table->foreign('station_name')->references('name')->on('station');
 
             $table->dateTime('datetime');
@@ -35,6 +35,8 @@ return new class extends Migration {
             $table->boolean('hail')->default(false);
             $table->boolean('thunderstorm')->default(false);
             $table->boolean('tornado')->default(false);
+
+            $table->index(['station_name']);
         });
     }
 

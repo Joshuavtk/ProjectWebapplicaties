@@ -4,14 +4,10 @@ namespace App\Models;
 
 use App\Traits\Blendable;
 use App\Traits\EncryptPassword;
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Lumen\Auth\Authorizable;
 
 class Station extends Model
@@ -49,6 +45,8 @@ class Station extends Model
      */
     protected $keyType = 'string';
 
+    protected $table = 'station';
+
     //Geeft het timezone object terug
     public function timezone(): HasOne
     {
@@ -64,5 +62,53 @@ class Station extends Model
     public function weatherData(): HasMany
     {
         return $this->hasMany(WeatherData::class, 'station_name', 'name');
+    }
+
+    public function isActive(): bool
+    {
+        if (count($this->weatherData)) {
+            $last_date = last($this->weatherData->all())['datetime'];
+        } else {
+            return false;
+        }
+
+        if ($last_date < date("Y-m-d H:i:s", strtotime("-1 day"))) {
+            return false;
+        }
+        return true;
+    }
+
+    public function averageMeasurements(): array
+    {
+        $weatherData = $this->weatherData;
+
+        $averages = [];
+
+        $avg_fields = [
+            'temp',
+            'dew_point_temp',
+            'station_air_pressure',
+            'sea_level_air_pressure',
+            'visibility',
+            'wind_speed',
+            'precipitation',
+            'snow_depth',
+            'cloud_cover_percentage',
+            'wind_direction',
+            'frost',
+            'rain',
+            'snow',
+            'hail',
+            'thunderstorm',
+            'tornado'
+        ];
+
+
+        foreach ($avg_fields as $row) {
+
+            $averages[] = [$row => round($weatherData->avg($row), 1)];
+        }
+
+        return $averages;
     }
 }

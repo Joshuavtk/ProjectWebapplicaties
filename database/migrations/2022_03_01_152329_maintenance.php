@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('maintenance', function (Blueprint $blueprint){
+        Schema::create('maintenances', function (Blueprint $blueprint){
             $blueprint->uuid('id')->primary()->default('uuid()');
             $blueprint->uuid('station_id')->index();
             $blueprint->uuid('created_by')->index();

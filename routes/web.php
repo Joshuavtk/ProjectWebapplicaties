@@ -16,6 +16,10 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->post('/saveReport', 'Admin\ReportController@create');
+$router->get('/getReport/{id}', 'Admin\ReportController@get');
+$router->get('/getReports', 'Admin\ReportController@getAll');
+
 $router->group(['prefix' => 'authentication'], function () use ($router) {
     $router->post('/', 'Authentication\AuthenticateController@basic');
     $router->post('/register', 'Authentication\RegisterController@register');
@@ -43,22 +47,23 @@ $router->group(['prefix' => 'users', 'middleware' => ['auth']], function () use 
     });
 });
 
-$router->group(['prefix' => 'maintenances', 'middleware' => ['auth']], function () use ($router) {
-    $router->get('/{id}', 'MaintenancesController@view');
-    $router->post('/{id}', 'MaintenancesController@update');
-    $router->delete('/{id}/delete', 'MaintenancesController@delete');
-
-    $router->group(['prefix' => '/admin', 'middleware' => ['auth']], function () use ($router) {
-        $router->get('/', 'Admin\MaintenancesController@index');
-        $router->get('/trashed', 'Admin\MaintenancesController@trashed');
-        $router->get('/{id}', 'Admin\MaintenancesController@view');
-        $router->post('/', 'Admin\MaintenancesController@create');
-        $router->put('/', 'Admin\MaintenancesController@update');
-        $router->post('/{id}/restore', 'Admin\MaintenancesController@restore');
-        $router->delete('/{id}/delete', 'Admin\MaintenancesController@forceDelete');
-        $router->delete('/{id}/force-delete', 'Admin\MaintenancesController@forceDelete');
-    });
-});
+//$router->group(['prefix' => 'maintenances', 'middleware' => ['auth']], function () use ($router) {
+//    $router->get('/{id}', 'MaintenancesController@view');
+//    $router->post('/{id}', 'MaintenancesController@update');
+//    $router->delete('/{id}/delete', 'MaintenancesController@delete');
+//
+//    $router->group(['prefix' => '/admin', 'middleware' => ['auth']], function () use ($router) {
+//        $router->get('/', 'Admin\MaintenancesController@index');
+//        $router->get('/trashed', 'Admin\MaintenancesController@trashed');
+//        $router->get('/{id}', 'Admin\MaintenancesController@view');
+//        $router->post('/', 'Admin\MaintenancesController@create');
+//        $router->put('/', 'Admin\MaintenancesController@update');
+//        $router->post('/{id}/restore', 'Admin\MaintenancesController@restore');
+//        $router->delete('/{id}/delete', 'Admin\MaintenancesController@forceDelete');
+//        $router->delete('/{id}/force-delete', 'Admin\MaintenancesController@forceDelete');
+//
+//    });
+//});
 //
 //$router->group(['prefix' => 'weather'], function () use ($router) {
 //    $router->post('/', 'WeatherStationsController@create');

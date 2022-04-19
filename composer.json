@@ -9,7 +9,8 @@
         "firebase/php-jwt": "^5.4",
         "flipbox/lumen-generator": "^9.1",
         "fruitcake/laravel-cors": "^3.0",
-        "laravel/lumen-framework": "^9.0"
+        "laravel/lumen-framework": "^9.0",
+      "ext-http": "*"
     },
     "require-dev": {
         "knuckleswtf/scribe": "^3.19",

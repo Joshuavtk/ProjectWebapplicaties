@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWK;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Gate;

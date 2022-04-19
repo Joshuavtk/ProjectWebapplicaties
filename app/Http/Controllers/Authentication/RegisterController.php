@@ -77,7 +77,7 @@ class RegisterController extends Controller
         return $this->validate($request, [
             'email' => 'required_without:password|email|unique:users', //email address must be unique
             'password' => 'required|string',
-            'subscription_id' => 'uuid|exists:users,id', //created by user must already exist
+            'subscription_id' => 'uuid|exists:subscriptions,id', //created by user must already exist
             'created_by,updated_by,deleted_by' => 'uuid|exists:users,id', //created by user must already exist
         ]);
     }

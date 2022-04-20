@@ -44,10 +44,6 @@ $router->group(['prefix' => 'users', 'middleware' => ['auth']], function () use 
 });
 
 $router->group(['prefix' => 'maintenances', 'middleware' => ['auth']], function () use ($router) {
-    $router->get('/{id}', 'MaintenancesController@view');
-    $router->post('/{id}', 'MaintenancesController@update');
-    $router->delete('/{id}/delete', 'MaintenancesController@delete');
-
     $router->group(['prefix' => '/admin', 'middleware' => ['auth']], function () use ($router) {
         $router->get('/', 'Admin\MaintenancesController@index');
         $router->get('/trashed', 'Admin\MaintenancesController@trashed');
@@ -58,11 +54,14 @@ $router->group(['prefix' => 'maintenances', 'middleware' => ['auth']], function 
         $router->delete('/{id}/delete', 'Admin\MaintenancesController@forceDelete');
         $router->delete('/{id}/force-delete', 'Admin\MaintenancesController@forceDelete');
     });
+
+    $router->get('/{id}', 'MaintenancesController@view');
+    $router->post('/{id}', 'MaintenancesController@update');
+    $router->delete('/{id}/delete', 'MaintenancesController@delete');
 });
 
 $router->group(['prefix' => 'subscriptions'], function () use ($router) {
     $router->get('/', 'SubscriptionController@index');
-    $router->get('/{id}', 'SubscriptionController@view');
 
     $router->group(['prefix' => '/admin', 'middleware' => ['auth']], function () use ($router) {
         $router->get('/', 'Admin\SubscriptionController@index');
@@ -74,6 +73,8 @@ $router->group(['prefix' => 'subscriptions'], function () use ($router) {
         $router->delete('/{id}/delete', 'Admin\SubscriptionController@forceDelete');
         $router->delete('/{id}/force-delete', 'Admin\SubscriptionController@forceDelete');
     });
+
+    $router->get('/{id}', 'SubscriptionController@view');
 });
 //
 //$router->group(['prefix' => 'weather'], function () use ($router) {
@@ -82,7 +83,7 @@ $router->group(['prefix' => 'subscriptions'], function () use ($router) {
 //});
 //
 //
-$router->group(['prefix' => 'api'], function () use ($router) {
+$router->group(['prefix' => 'stations'], function () use ($router) {
 
     $router->post('/sendWeatherData', 'WeatherStationsController@receive');
     $router->get('/getWeatherData', 'WeatherStationsController@get');

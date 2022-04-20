@@ -7,14 +7,16 @@ export const stationService = {
 
 function getStationData(stationName) {
     return axios
-        .get(`/getWeatherData/${stationName}`)
+        .get(`/stations/getWeatherData/${stationName}`)
         .then(handleResponse)
         .then((station) => station);
 }
 
-function getStationsData(pageNum) {
+function getStationsData(pageNum, orderField, orderBy) {
     return axios
-        .get(`/getStations?page=${pageNum}`)
+        .get(
+            `/stations/getStations?page=${pageNum}&ordered_row=${orderField}&order_by=${orderBy}`
+        )
         .then(handleResponse)
         .then((stations) => stations);
 }

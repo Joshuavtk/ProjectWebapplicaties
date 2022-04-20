@@ -38,6 +38,11 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('stations');
+        Schema::dropIfExists('timezones');
+        Schema::dropIfExists('maintenance');
+        Schema::dropIfExists('measurements');
         Schema::dropIfExists('users');
     }
 };

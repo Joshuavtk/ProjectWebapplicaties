@@ -34,11 +34,14 @@ const actions = {
                 // router.push({ name: 'stations' })
             });
     },
-    getAll({ state, commit, dispatch }, pageNum) {
+    getAll({ state, commit, dispatch }, data) {
         commit("startProgress");
+        let pageNum = data[0];
+        let orderField = data[1];
+        let orderBy = data[2];
 
         stationService
-            .getStationsData(pageNum)
+            .getStationsData(pageNum, orderField, orderBy)
             .then((data) => {
                 let stations = data.data;
                 let pagination = {

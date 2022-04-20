@@ -64,12 +64,15 @@
 import axios from "axios";
 
 export default {
+    mounted() {
+        console.log(import.meta.env.VITE_BASE_URL);
+    },
     methods: {
         login() {
             this.$refs.errorField.innerText = "";
             axios
                 .post(
-                    "http://localhost/ProjectWebapplicaties/public/authentication",
+                    import.meta.env.VITE_BASE_URL + "/authentication",
                     {
                         email: this.email,
                         password: this.password,

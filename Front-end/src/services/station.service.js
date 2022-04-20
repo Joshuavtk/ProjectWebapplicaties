@@ -7,7 +7,7 @@ export const stationService = {
 
 function getStationData(stationName) {
     return axios
-        .get(`/stations/getWeatherData/${stationName}`)
+        .get(import.meta.env.VITE_BASE_URL + + '/stations/getWeatherData/${stationName}')
         .then(handleResponse)
         .then((station) => station);
 }
@@ -15,7 +15,7 @@ function getStationData(stationName) {
 function getStationsData(pageNum, orderField, orderBy) {
     return axios
         .get(
-            `/stations/getStations?page=${pageNum}&ordered_row=${orderField}&order_by=${orderBy}`
+            import.meta.env.VITE_BASE_URL + '/stations/getStations?page=${pageNum}&ordered_row=${orderField}&order_by=${orderBy}'
         )
         .then(handleResponse)
         .then((stations) => stations);

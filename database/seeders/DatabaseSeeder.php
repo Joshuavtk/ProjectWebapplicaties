@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $sobscriptionId = Subscription::first();
+        $sobscriptionId = (Subscription::first())->id;
 
         DB::table('users')->insert([
             ['id' => Str::uuid(), 'email' => 'admin@dxmusic.nl', 'password' => Hash::make('BRkuT2awqENoNMpo'), 'subscription_id' => $sobscriptionId, 'role' => \App\Models\User::USER_ROLE_ADMIN],

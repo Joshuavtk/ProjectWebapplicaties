@@ -13,12 +13,12 @@ const router = createRouter({
             component: HomeView,
         },
         {
-            path: "/station",
+            path: "/stations",
             name: "station.all",
             component: () => import("../views/StationsView.vue"),
         },
         {
-            path: "/station/:stationName",
+            path: "/stations/:stationName",
             name: "station.view",
             component: () => import("../views/StationView.vue"),
         },

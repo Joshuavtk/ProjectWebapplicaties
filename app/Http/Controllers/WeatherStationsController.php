@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\StationCollection;
-use App\Http\Resources\StationResource;
-use App\Http\Resources\WeatherCollection;
-use App\Models\Measurement;
 use App\Models\Station;
 use App\Models\WeatherData;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class WeatherStationsController extends Controller
 {
@@ -25,15 +21,16 @@ class WeatherStationsController extends Controller
         return WeatherData::all();
     }
 
-    public function receive(Request $request) {
+    public function receive(Request $request)
+    {
 
 
         if ($request->post('WEATHERDATA') == null) {
             return "Error";
         }
 
-        foreach($request->post('WEATHERDATA') as $row) {
-            $data = new WeatherData ;
+        foreach ($request->post('WEATHERDATA') as $row) {
+            $data = new WeatherData;
 
             $data->station_name = $row['STN'];
             $data->datetime = $row['DATE'] . ' ' . $row['TIME'];
@@ -64,17 +61,46 @@ class WeatherStationsController extends Controller
         return "Success";
     }
 
-    public function get() {
+    public function get()
+    {
         return WeatherData::all();
     }
 
-    public function showStation($station_name) {
+    public function showStation($station_name)
+    {
         $station = Station::all()->where('name', '=', $station_name)->first();
-        return ['station' => $station, 'measurements' => $station->weatherData];
+        if ($station) {
+            return ['station' => $station, 'measurements' => $station->weatherData];
+        } else {
+            throw new NotFoundHttpException('No station with that name');
+        }
     }
 
-    public function getStations()
+    public function getStations(Request $request)
     {
-        return DB::table('station')->paginate(10);
+        $orderedRow = $request->ordered_row ?: 'name';
+        $order = $request->order_by === 'desc' ? 'desc' : 'asc';
+
+        if ($orderedRow !== 'name') {
+            $stations = Station::join('weather_data', 'station.name', '=', 'weather_data.station_name')
+                ->groupBy('station_name')
+                ->orderByRaw("AVG(${orderedRow}) ${order}")
+                ->paginate(10);
+        } else {
+            $stations = Station::has('weatherData')->paginate(10);
+        }
+
+        $new_stations = ['data' => []];
+        foreach ($stations as $station) {
+            $new_station = $station->toArray();
+            $new_station['is_active'] = $station->isActive();
+            foreach ($station->averageMeasurements() as $measurement) {
+                $new_station[key($measurement)] = $measurement[key($measurement)];
+            }
+            $new_stations['data'][] = $new_station;
+
+        }
+
+        return $new_stations + $stations->toArray();
     }
 }

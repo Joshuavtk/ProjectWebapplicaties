@@ -1,13 +1,9 @@
-<template>
-    Dashboard
-</template>
+<template>Dashboard</template>
 
 <script>
 export default {
-    name: "DashboardView"
-}
+    name: "DashboardView",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

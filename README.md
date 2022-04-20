@@ -1,24 +1,58 @@
-# Lumen PHP Framework
+# IWA Applicatie
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen)](https://packagist.org/packages/laravel/lumen-framework)
+Built with [Laravel Lumen](https://lumen.laravel.com/).
+## Requirements
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+- Internet connection
+- Docker
 
-## Official Documentation
+## Installatie
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+De applicatie draait op docker dit maakt het heel simpel om de applicatie te draaien. je kan de applicatie starten door
+het commando Als je in de root map van de applicatie zit dan moet je op de terminal de volegnde drie commando's
+uitvoeren.
 
-## Contributing
+docker-compose up
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Als alles draait open een nieuwe terminal venster **Laat de oude open**.
 
-## Security Vulnerabilities
+voor het  
+*commando docker-compose exec php artisan migrate* en  
+*docker-compose exec php artisan db:seed*
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
 
-## License
+## Installation without docker
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+First you should install all the dependencies by using `composer install` in the main folder.
+
+### Environment variables
+Next you'll want to copy the *.env.example* file to the same folder and name it `.env`
+In this file you should set your database environment variables such as
+
+`DB_DATABASE=iwa`         The database to be used for the Laravel application 
+
+`DB_USERNAME=homestead`   The username used for database authentication 
+
+`DB_PASSWORD=secret`      The password used for database authentication
+
+### Create database
+After correcting these values you should create the database by using a GUI such as MySQL workbench or using the SQL
+command `CREATE DATABASE iwa`
+
+### Start migrations
+Before running the migrations you should import the *ProjectSemester2Stations.sql* file in the newly created database.
+This file will create all the stations and countries used in the application.
+
+After doing this you can run the `php artisan migrate` command which will create the rest of the tables in the database.
+To fill these tables with some default data you can run the `php artisan db:seed` command.
+
+### Running the project
+The project can now be used with the following command `php artisan serve` which will give you the API URL to be used in the front-end.
+
+## Front-end
+To run the front-end read the *Front-end/README.md* file for instructions.
+
+### Adding station measurements
+Weather data / measurements will not be generated with the `php artisan db:seed` command and should be generated with the WeatherGen application.
+The URL used to send these generated measurements is */stations/sendWeatherData*.
+You will need to turn on HTTP logging.

@@ -87,7 +87,7 @@ class WeatherStationsController extends Controller
                 ->orderByRaw("AVG(${orderedRow}) ${order}")
                 ->paginate(10);
         } else {
-            $stations = Station::has('weatherData')->paginate(10);
+            $stations = Station::paginate(10);
         }
 
         $new_stations = ['data' => []];

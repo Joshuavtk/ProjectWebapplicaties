@@ -61,8 +61,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
     mounted() {
         console.log(import.meta.env.VITE_BASE_URL);
@@ -70,14 +68,11 @@ export default {
     methods: {
         login() {
             this.$refs.errorField.innerText = "";
-            axios
-                .post(
-                    import.meta.env.VITE_BASE_URL + "/authentication",
-                    {
-                        email: this.email,
-                        password: this.password,
-                    }
-                )
+            this.$axios
+                .post("/authentication", {
+                    email: this.email,
+                    password: this.password,
+                })
                 .then((success) => {
                     let user = {
                         api_token: success.data.token,

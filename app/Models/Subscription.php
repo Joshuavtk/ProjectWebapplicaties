@@ -4,10 +4,11 @@ namespace App\Models;
 
 use App\Traits\Blendable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Subscription extends Model
 {
-    use Blendable;
+    use Blendable, SoftDeletes;
 
 
     protected $keyType = 'string';

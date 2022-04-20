@@ -15,6 +15,9 @@ use Laravel\Lumen\Auth\Authorizable;
 
 class Measurement extends Model
 {
+
+    use SoftDeletes;
+
      protected $fillable = ['STN','TEMP','TEMP','DEWP','STP','SLP','VISIB','WDSP','PRCP','SNDP','FRSHTT','CLDC','WNDDIR'];
     public $timestamps = false;
     //Geeft het timezone object terug

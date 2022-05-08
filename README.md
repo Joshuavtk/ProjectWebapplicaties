@@ -4,26 +4,27 @@ Built with [Laravel Lumen](https://lumen.laravel.com/).
 ## Requirements
 
 - Internet connection
+
+# Recommended
+
 - Docker
 
-## Installatie
+## Installation
 
-De applicatie draait op docker dit maakt het heel simpel om de applicatie te draaien. je kan de applicatie starten door
-het commando Als je in de root map van de applicatie zit dan moet je op de terminal de volegnde drie commando's
-uitvoeren.
+The recommended way to use this program is with docker, which makes it very easy to run. Go through the following instructions to finish the installation and to start the application.
 
-docker-compose up
+`docker-compose up`
 
-Als alles draait open een nieuwe terminal venster **Laat de oude open**.
+When everything is running open a new terminal. **Leave the old one open**.
 
-voor het  
-*commando docker-compose exec php artisan migrate* en  
-*docker-compose exec php artisan db:seed*
+Now run the following two commands:
 
+`docker-compose exec php artisan migrate`
+`docker-compose exec php artisan db:seed`
 
 ## Installation without docker
 
-First you should install all the dependencies by using `composer install` in the main folder.
+First you should install all the dependencies by executing `composer install` from the main folder.
 
 ### Environment variables
 Next you'll want to copy the *.env.example* file to the same folder and name it `.env`

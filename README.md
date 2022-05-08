@@ -5,11 +5,11 @@ Built with [Laravel Lumen](https://lumen.laravel.com/).
 
 - Internet connection
 
-# Recommended
+## Recommended
 
 - Docker
 
-## Installation
+# Installation
 
 The recommended way to use this program is with docker, which makes it very easy to run. Go through the following instructions to finish the installation and to start the application.
 
@@ -20,6 +20,7 @@ When everything is running open a new terminal. **Leave the old one open**.
 Now run the following two commands:
 
 `docker-compose exec php artisan migrate`
+
 `docker-compose exec php artisan db:seed`
 
 ## Installation without docker
